@@ -37,6 +37,15 @@ func MKRouter() *gin.Engine {
 		v1CN.GET("", configuration.GetNamespaceHandler)
 		v1CN.POST("", configuration.PostNamespaceHandler)
 	}
+	v1CK := v1C.Group("/key")
+	{
+		v1CK.POST("", configuration.PostKeyHandler)
+	}
+
+	v1CC := v1C.Group("/config")
+	{
+		v1CC.POST("", configuration.PostConfigHandler)
+	}
 
 	return router
 }

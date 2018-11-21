@@ -1,30 +1,41 @@
 package configuration
 
 import (
+	"github.com/HuiCheng/devops/backend/util"
 	"github.com/jinzhu/gorm"
 )
 
 // Config Model
 type Config struct {
-	gorm.Model
-	Lable      string      `json:"lable"`
-	Namespaces []Namespace `json:"namespaces"`
-	Keys       []Key       `json:"keys"`
-	Values     []Value     `json:"values"`
+	ID         uint           `json:"id" gorm:"primary_key"`
+	CreatedAt  util.JSONTime  `json:"-"`
+	UpdatedAt  util.JSONTime  `json:"-"`
+	DeletedAt  *util.JSONTime `json:"-" sql:"index" `
+	Lable      string         `json:"lable"`
+	Note       string         `json:"note"`
+	Namespaces []Namespace    `json:"namespaces"`
+	Keys       []Key          `json:"keys"`
+	Values     []Value        `json:"values"`
 }
 
 // Namespace Model
 type Namespace struct {
-	gorm.Model
-	Lable    string `json:"lable"`
-	ConfigID uint   `json:"-"`
+	ID        uint           `json:"id" gorm:"primary_key"`
+	CreatedAt util.JSONTime  `json:"-"`
+	UpdatedAt util.JSONTime  `json:"-"`
+	DeletedAt *util.JSONTime `json:"-" sql:"index" `
+	Lable     string         `json:"lable" binding:"required,min=3,max=50"`
+	ConfigID  uint           `json:"-"`
 }
 
 // Key Model
 type Key struct {
-	gorm.Model
-	Lable    string `json:"lable"`
-	ConfigID uint   `json:"-"`
+	ID        uint           `json:"id" gorm:"primary_key"`
+	CreatedAt util.JSONTime  `json:"-"`
+	UpdatedAt util.JSONTime  `json:"-"`
+	DeletedAt *util.JSONTime `json:"-" sql:"index" `
+	Lable     string         `json:"lable" binding:"required,min=3,max=50"`
+	ConfigID  uint           `json:"-"`
 }
 
 // Value Model

@@ -1,8 +1,6 @@
 package include
 
 import (
-	"fmt"
-
 	"github.com/HuiCheng/devops/backend/api/v1/configuration"
 	"github.com/jinzhu/gorm"
 	// sqlite3
@@ -24,7 +22,8 @@ func InitDB() {
 			panic("failed to connect database: " + err.Error())
 		}
 	}
-	fmt.Println("InitDB")
+	db.AutoMigrate(&configuration.Config{})
+	db.AutoMigrate(&configuration.Key{})
 	db.AutoMigrate(&configuration.Namespace{})
 	DB = db
 }

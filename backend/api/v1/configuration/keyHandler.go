@@ -7,22 +7,11 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-// GetNamespaceHandler ALL
-func GetNamespaceHandler(c *gin.Context) {
-	c.JSON(
-		http.StatusOK,
-		gin.H{
-			"code": http.StatusOK,
-			"data": "",
-		},
-	)
-}
-
-// PostNamespaceHandler New One
-func PostNamespaceHandler(c *gin.Context) {
+// PostKeyHandler New One
+func PostKeyHandler(c *gin.Context) {
 	db := c.MustGet("DB").(*gorm.DB)
 
-	var post Namespace
+	var post Key
 	if err := c.ShouldBindJSON(&post); err != nil {
 		c.JSON(
 			http.StatusBadRequest,
