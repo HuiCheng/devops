@@ -12,8 +12,9 @@ func PostConfigHandler(c *gin.Context) {
 	db := c.MustGet("DB").(*gorm.DB)
 	_ = db
 
+	var post Config
 	c.JSON(
 		http.StatusOK,
-		gin.H{"code": http.StatusCreated, "data": ""},
+		gin.H{"code": http.StatusCreated, "data": post},
 	)
 }
