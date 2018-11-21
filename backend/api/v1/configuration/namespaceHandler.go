@@ -4,10 +4,16 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/gorm"
 )
 
-// GetNamespace Get ALL
-func GetNamespace(c *gin.Context) {
+// NamespaceHandler Struct
+type NamespaceHandler struct {
+	DB *gorm.DB
+}
+
+// Get ALL
+func (h *NamespaceHandler) Get(c *gin.Context) {
 	c.JSON(
 		http.StatusOK,
 		gin.H{
@@ -17,8 +23,8 @@ func GetNamespace(c *gin.Context) {
 	)
 }
 
-// PostNamespace New One
-func PostNamespace(c *gin.Context) {
+// Post New One
+func (h *NamespaceHandler) Post(c *gin.Context) {
 	c.JSON(
 		http.StatusOK,
 		gin.H{

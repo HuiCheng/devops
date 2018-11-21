@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/HuiCheng/devops/backend/api/v1/configuration"
+	"github.com/HuiCheng/devops/backend/include"
 
 	"github.com/gin-gonic/gin"
 )
@@ -23,8 +24,9 @@ func MKRouter() *gin.Engine {
 	v1C := v1.Group("/configuration")
 	v1CN := v1C.Group("/namespace")
 	{
-		v1CN.GET("", configuration.GetNamespace)
-		v1CN.POST("", configuration.GetNamespace)
+		namespace := configuration.NamespaceHandler{DB: include.DB}
+		v1CN.GET("", namespace.Get)
+		v1CN.POST("", namespace.Post)
 	}
 
 	return router
