@@ -1,6 +1,7 @@
 package configuration
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -39,6 +40,7 @@ func PostNamespaceHandler(c *gin.Context) {
 		return
 	}
 
+	fmt.Println(post)
 	c.JSON(
 		http.StatusOK,
 		gin.H{"code": http.StatusCreated, "data": post},
