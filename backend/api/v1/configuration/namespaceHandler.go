@@ -1,19 +1,15 @@
 package configuration
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 )
 
-// NamespaceHandler Struct
-type NamespaceHandler struct {
-	DB *gorm.DB
-}
-
-// Get ALL
-func (h *NamespaceHandler) Get(c *gin.Context) {
+// GetNamespaceHandler ALL
+func GetNamespaceHandler(c *gin.Context) {
 	c.JSON(
 		http.StatusOK,
 		gin.H{
@@ -23,8 +19,11 @@ func (h *NamespaceHandler) Get(c *gin.Context) {
 	)
 }
 
-// Post New One
-func (h *NamespaceHandler) Post(c *gin.Context) {
+// PostNamespaceHandler New One
+func PostNamespaceHandler(c *gin.Context) {
+	db := c.MustGet("DB").(*gorm.DB)
+	fmt.Println(db)
+
 	c.JSON(
 		http.StatusOK,
 		gin.H{
