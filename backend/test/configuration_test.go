@@ -60,15 +60,29 @@ func TestPostConfig(t *testing.T) {
 		Note:       "note",
 		Namespaces: []configuration.Namespace{n},
 		Keys:       []configuration.Key{k},
+		Values: []configuration.Value{
+			configuration.Value{
+				Namespace: n,
+				Key:       k,
+				Value:     "Value",
+			},
+		},
 	}
+
 	data := e.POST("/v1/configuration/config").
 		WithJSON(post).
 		Expect().
-		Status(http.StatusOK).JSON().Object().Raw()["data"]
+		Status(http.StatusOK).JSON().Object().Raw()
 
-	if err := json.Unmarshal(util.InterMap2Byte(data), &c); err != nil {
-		t.Fatalf("%+v\n", err.Error())
-	}
+	t.Logf("\n%+v\n%+v\n", post, data)
+}
 
-	t.Logf("\n%+v\n%+v\n%+v\n", post, data, c)
+func TestGetConfig(t *testing.T) {
+	e := httpexpect.New(t, tts.URL)
+
+	data := e.GET("/v1/configuration/config").
+		Expect().
+		Status(http.StatusOK).JSON().Object().Raw()
+	j, _ := json.Marshal(data)
+	t.Logf("\n%+v\n", string(j))
 }

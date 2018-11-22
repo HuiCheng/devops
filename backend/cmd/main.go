@@ -6,6 +6,6 @@ import (
 
 func main() {
 	include.InitFlag()
-	include.InitDB()
+	include.InitDB("prod")
 	include.MKRouter().Run(include.Bind)
 }

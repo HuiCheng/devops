@@ -9,6 +9,25 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
+// GetConfigHandler All
+func GetConfigHandler(c *gin.Context) {
+	db := c.MustGet("DB").(*gorm.DB)
+
+	var result []Config
+	if err := db.Preload("Namespaces").Preload("Keys").Preload("Values").Find(&result).Error; err != nil {
+		glog.Errorln(err.Error())
+		c.JSON(
+			http.StatusBadRequest,
+			gin.H{"code": http.StatusBadRequest, "data": err.Error()},
+		)
+	} else {
+		c.JSON(
+			http.StatusOK,
+			gin.H{"code": http.StatusCreated, "data": result},
+		)
+	}
+}
+
 // PostConfigHandler New One
 func PostConfigHandler(c *gin.Context) {
 	db := c.MustGet("DB").(*gorm.DB)
@@ -29,7 +48,7 @@ func PostConfigHandler(c *gin.Context) {
 	} else {
 		c.JSON(
 			http.StatusOK,
-			gin.H{"code": http.StatusCreated, "data": post},
+			gin.H{"code": http.StatusCreated, "data": ""},
 		)
 	}
 

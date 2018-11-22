@@ -12,7 +12,7 @@ var (
 
 func init() {
 	include.InitFlag()
-	include.InitDB()
+	include.InitDB("test")
 
 	tts = httptest.NewServer(include.MKRouter())
 }

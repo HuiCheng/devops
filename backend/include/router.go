@@ -44,6 +44,7 @@ func MKRouter() *gin.Engine {
 
 	v1CC := v1C.Group("/config")
 	{
+		v1CC.GET("", configuration.GetConfigHandler)
 		v1CC.POST("", configuration.PostConfigHandler)
 	}
 

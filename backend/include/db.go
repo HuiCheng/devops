@@ -3,6 +3,7 @@ package include
 import (
 	"github.com/HuiCheng/devops/backend/api/v1/configuration"
 	"github.com/jinzhu/gorm"
+
 	// sqlite3
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
@@ -13,7 +14,7 @@ var (
 )
 
 // InitDB Func
-func InitDB() {
+func InitDB(t string) {
 	var err error
 	var db *gorm.DB
 	if gormType == "sqlite" {
@@ -22,8 +23,12 @@ func InitDB() {
 			panic("failed to connect database: " + err.Error())
 		}
 	}
-	db.AutoMigrate(&configuration.Config{})
+	if t == "test" {
+		db.LogMode(true)
+	}
 	db.AutoMigrate(&configuration.Key{})
 	db.AutoMigrate(&configuration.Namespace{})
+	db.AutoMigrate(&configuration.Value{})
+	db.AutoMigrate(&configuration.Config{})
 	DB = db
 }
