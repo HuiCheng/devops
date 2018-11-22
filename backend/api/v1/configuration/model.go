@@ -9,9 +9,9 @@ import (
 // Config Model
 type Config struct {
 	ID         uint        `json:"id" gorm:"primary_key"`
-	CreatedAt  time.Time   `json:"-"`
+	CreatedAt  time.Time   `json:"-" time_format:"2006-01-02 15:04:05"`
 	UpdatedAt  time.Time   `json:"-"`
-	DeletedAt  *time.Time  `json:"-" sql:"index" `
+	DeletedAt  *time.Time  `json:"-" sql:"index"`
 	Lable      string      `json:"lable"`
 	Note       string      `json:"note"`
 	Namespaces []Namespace `json:"namespaces"`
@@ -24,7 +24,7 @@ type Namespace struct {
 	ID        uint       `json:"id" gorm:"primary_key"`
 	CreatedAt time.Time  `json:"-"`
 	UpdatedAt time.Time  `json:"-"`
-	DeletedAt *time.Time `json:"-" sql:"index" `
+	DeletedAt *time.Time `json:"-" sql:"index"`
 	Lable     string     `json:"lable" binding:"required,min=3,max=50"`
 	ConfigID  uint       `json:"-"`
 }
@@ -34,7 +34,7 @@ type Key struct {
 	ID        uint       `json:"id" gorm:"primary_key"`
 	CreatedAt time.Time  `json:"-"`
 	UpdatedAt time.Time  `json:"-"`
-	DeletedAt *time.Time `json:"-" sql:"index" `
+	DeletedAt *time.Time `json:"-" sql:"index"`
 	Lable     string     `json:"lable" binding:"required,min=3,max=50"`
 	ConfigID  uint       `json:"-"`
 }
