@@ -15,7 +15,9 @@ func GetConfigHandler(c *gin.Context) {
 	db := c.MustGet("DB").(*gorm.DB)
 
 	var result []Config
-	if err := db.Preload("Namespaces").Preload("Keys").Preload("Values").Find(&result).Error; err != nil {
+	if err := db.Preload("Namespaces").Preload("Keys").Preload("Values").
+		Preload("Values.Namespace").Preload("Values.Key").
+		Find(&result).Error; err != nil {
 		glog.Errorln(err.Error())
 		c.JSON(
 			http.StatusBadRequest,
