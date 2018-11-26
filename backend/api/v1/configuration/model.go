@@ -45,8 +45,8 @@ type Value struct {
 	CreatedAt time.Time  `json:"-"`
 	UpdatedAt time.Time  `json:"-"`
 	DeletedAt *time.Time `json:"-" sql:"index"`
-	Namespace Namespace  `json:"namespace"`
-	Key       Key        `json:"key"`
+	Namespace Namespace  `json:"namespace" gorm:"association_autoupdate:false"`
+	Key       Key        `json:"key" gorm:"association_autoupdate:false"`
 	Value     string     `json:"value"`
 	ConfigID  uint       `json:"-"`
 }
