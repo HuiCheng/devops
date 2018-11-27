@@ -12,9 +12,9 @@ import (
 )
 
 var (
-	n configuration.Namespace
-	k configuration.Key
-	c configuration.Config
+	ns []configuration.Namespace
+	ks []configuration.Key
+	c  configuration.Config
 )
 
 func TestGetNamespace(t *testing.T) {
@@ -24,49 +24,65 @@ func TestGetNamespace(t *testing.T) {
 }
 
 func TestPostNamespace(t *testing.T) {
+	n := configuration.Namespace{}
 	e := httpexpect.New(t, tts.URL)
-	post := configuration.Namespace{Lable: "TestPostNamespace"}
-	data := e.POST("/v1/configuration/namespace").
-		WithJSON(post).
-		Expect().
-		Status(http.StatusOK).JSON().Object().Raw()["data"]
+	for _, i := range []string{"1", "2"} {
+		post := configuration.Namespace{Lable: "TestPostNamespace" + i}
+		data := e.POST("/v1/configuration/namespace").
+			WithJSON(post).
+			Expect().
+			Status(http.StatusOK).JSON().Object().Raw()["data"]
 
-	if err := json.Unmarshal(util.InterMap2Byte(data), &n); err != nil {
-		t.Fatalf("%+v\n", err.Error())
+		if err := json.Unmarshal(util.InterMap2Byte(data), &n); err != nil {
+			t.Fatalf("%+v\n", err.Error())
+		}
+		ns = append(ns, n)
+		t.Logf("\n%+v\n%+v\n%+v\n", post, data, n)
 	}
-
-	t.Logf("\n%+v\n%+v\n%+v\n", post, data, n)
 }
 
 func TestPostKey(t *testing.T) {
+	k := configuration.Key{}
 	e := httpexpect.New(t, tts.URL)
-	post := configuration.Key{Lable: "TestPostKey"}
-	data := e.POST("/v1/configuration/key").
-		WithJSON(post).
-		Expect().
-		Status(http.StatusOK).JSON().Object().Raw()["data"]
+	for _, i := range []string{"1", "2"} {
+		post := configuration.Key{Lable: "TestPostKey" + i}
+		data := e.POST("/v1/configuration/key").
+			WithJSON(post).
+			Expect().
+			Status(http.StatusOK).JSON().Object().Raw()["data"]
 
-	if err := json.Unmarshal(util.InterMap2Byte(data), &k); err != nil {
-		t.Fatalf("%+v\n", err.Error())
+		if err := json.Unmarshal(util.InterMap2Byte(data), &k); err != nil {
+			t.Fatalf("%+v\n", err.Error())
+		}
+		ks = append(ks, k)
+
+		t.Logf("\n%+v\n%+v\n%+v\n", post, data, k)
 	}
 
-	t.Logf("\n%+v\n%+v\n%+v\n", post, data, k)
+}
+
+func mkVaules() (r []configuration.Value) {
+	for _, n := range ns {
+		for _, k := range ks {
+			r = append(r, configuration.Value{
+				Namespace: n,
+				Key:       k,
+				Value:     n.Lable + " " + k.Lable,
+			})
+		}
+	}
+	return
 }
 
 func TestPostConfig(t *testing.T) {
+
 	e := httpexpect.New(t, tts.URL)
 	post := configuration.Config{
 		Lable:      "lable",
 		Note:       "note",
-		Namespaces: []configuration.Namespace{n},
-		Keys:       []configuration.Key{k},
-		Values: []configuration.Value{
-			configuration.Value{
-				Namespace: n,
-				Key:       k,
-				Value:     "Value",
-			},
-		},
+		Namespaces: ns,
+		Keys:       ks,
+		Values:     mkVaules(),
 	}
 
 	data := e.POST("/v1/configuration/config").
