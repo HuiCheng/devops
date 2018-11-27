@@ -1,7 +1,6 @@
 package configuration
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/golang/glog"
@@ -52,17 +51,17 @@ func PostConfigHandler(c *gin.Context) {
 		return
 	}
 
-	fmt.Println("Start")
 	for i := range post.Values {
-		if err := db.Model(&post.Values[i].Namespace).Update("ValueID", post.Values[i].ID).Error; err != nil {
-			glog.Errorln(err.Error())
+		err1 := db.Model(&post.Values[i].Namespace).Update("ValueID", post.Values[i].ID).Error
+		err2 := db.Model(&post.Values[i].Key).Update("ValueID", post.Values[i].ID).Error
+		if err1 != nil || err2 != nil {
+			glog.Errorln(err1.Error(), err2.Error())
+			c.JSON(
+				http.StatusBadRequest,
+				gin.H{"code": http.StatusBadRequest, "data": []string{err1.Error(), err2.Error()}},
+			)
 		}
-		if err := db.Model(&post.Values[i].Key).Update("ValueID", post.Values[i].ID).Error; err != nil {
-			glog.Errorln(err.Error())
-		}
-		fmt.Println(i)
 	}
-	fmt.Println("Send")
 
 	c.JSON(
 		http.StatusOK,
